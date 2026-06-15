@@ -1,15 +1,22 @@
 {
+    "name": "Buscardini",
+    "context": "site",
     "protocol": "ftp",
     "host": "",
+    "port": 21,
     "username": "",
     "password": "",
     "remotePath": "/public_html/",
     "uploadOnSave": false,
+    "useTempFile": false,
+    "openSsh": false,
+    "secure": true,
+    "secureOptions": {
+        "rejectUnauthorized": false
+    },
     "connectTimeout": 30,
-    "ignore": [
-        ".vscode",
-        ".git",
-        ".DS_Store",
-        "Thumbs.db"
-    ]
+    "syncOption": {
+        "delete": false
+    },
+    "ignore": [".vscode", ".git", ".DS_Store", "Thumbs.db", ".gitignore", ".claude"]
 }
