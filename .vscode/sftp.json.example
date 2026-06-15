@@ -1,0 +1,15 @@
+{
+    "protocol": "ftp",
+    "host": "",
+    "username": "",
+    "password": "",
+    "remotePath": "/public_html/",
+    "uploadOnSave": false,
+    "connectTimeout": 30,
+    "ignore": [
+        ".vscode",
+        ".git",
+        ".DS_Store",
+        "Thumbs.db"
+    ]
+}
