@@ -3,3 +3,5 @@ Thumbs.db
 node_modules/
 .vscode/sftp.json
 !.vscode/sftp.json.example
+process/config.php
+!process/config.example.php

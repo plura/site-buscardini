@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /process/
+
+RewriteRule ^subscribe/?$ subscribe.php [L,QSA]
+RewriteRule ^contact/?$ contact.php [L,QSA]
+
+<Files "config.php">
+    Require all denied
+</Files>
+
+<Files "config.example.php">
+    Require all denied
+</Files>
