@@ -17,12 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     respond(false, t('Method not allowed.'), 405);
 }
 
+// The frontend posts a JSON body (Content-Type: application/json), not a
+// form-encoded one, so $_POST is never populated — read php://input instead.
+$input = json_decode(file_get_contents('php://input'), true) ?? [];
+
 // Honeypot: a hidden field real visitors never fill in.
-if (!empty($_POST['website'])) {
+if (!empty($input['website'])) {
     respond(true, t('Thanks!'));
 }
 
-$email = trim((string) ($_POST['email'] ?? ''));
+$email = trim((string) ($input['email'] ?? ''));
 
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     respond(false, t('Please enter a valid email address.'), 422);

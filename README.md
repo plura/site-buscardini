@@ -1,13 +1,23 @@
 # Buscardini — placeholder site
 
-One-page placeholder site, designed in Claude Design and exported as static
-HTML/CSS/JS. Deploys straight over FTP to `/public_html/` (see
+One-page "coming soon" placeholder for **buscardini.net**, the parent
+brand for three sub-brands: Comunica (strategic communication), LUMU
+(association for Guinea-Bissau's future), and BMangu (mango export B2B).
+Full-viewport screen with a contact modal and a newsletter signup;
+UI copy is PT-PT throughout. Designed in Claude Design and exported as
+static HTML/CSS/JS. Deploys straight over FTP to `/public_html/` (see
 `.vscode/sftp.json`) — there is no build step or WordPress install here,
 just the tracked files in this repo.
 
 ## Structure
 
 ```
+index.html                 the page itself — static, no templating
+assets/
+├── css/styles.css          all styling; CSS custom properties define the palette
+├── js/script.js             modal, contact form, newsletter — fetch() against process/
+└── media/                   sub-brand mask SVGs, favicon
+
 process/                   PHP backend for the two dynamic bits of the page
 ├── .htaccess               rewrites /process/contact and /process/subscribe to their .php handlers
 ├── config.example.php      committed template — copy to config.php and fill in
@@ -34,15 +44,28 @@ mail-template/              MJML source for transactional emails tied to the con
 
 ## Backend endpoints
 
-- `POST /process/contact` — `name`, `email`, `message`. Sends an email via
+- `POST /process/contact` — `{ name, email, message }`. Sends an email via
   PHPMailer over SMTP using the credentials in `process/config.php`.
-- `POST /process/subscribe` — `email`. Adds the address to a Mailchimp
+- `POST /process/subscribe` — `{ email }`. Adds the address to a Mailchimp
   Audience via the Mailchimp Marketing API (double opt-in). PHPMailer is
   not involved in this one — Mailchimp sends its own confirmation email.
 
-Both return JSON: `{ "success": bool, "message": string }`. Both also
-accept an optional hidden `website` field as a spam honeypot — leave it
-empty/unrendered in the real form.
+`assets/js/script.js` posts both as a **JSON body**
+(`Content-Type: application/json`, `fetch` + `JSON.stringify`), not a
+form-encoded one — both PHP handlers read `php://input` and `json_decode`
+it rather than using `$_POST`, which is never populated for JSON bodies.
+Endpoint URLs are set at the top of `script.js` (`CONTACT_URL`,
+`SUBSCRIBE_URL`) if they ever need to move.
+
+Both return JSON: `{ "success": bool, "message": string }`, and both
+accept an optional `website` field as a spam honeypot — but note the
+current form markup in `index.html` doesn't send one, so the honeypot
+check is inert until a hidden `website` field is added there. The
+frontend also doesn't currently read the `message` field from the
+response — it only checks the HTTP status code and shows its own
+hardcoded success/error copy either way, so `respond()`'s message text
+isn't visible to users yet (still correct to keep it right, since any
+future frontend change could start reading it).
 
 Response strings go through `process/lang.php`'s `t($text, $lang = 'pt')` —
 a flat dictionary keyed by the English source string (`t('Thanks!')` →

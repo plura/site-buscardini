@@ -53,15 +53,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     respond(false, t('Method not allowed.'), 405);
 }
 
+// The frontend posts a JSON body (Content-Type: application/json), not a
+// form-encoded one, so $_POST is never populated — read php://input instead.
+$input = json_decode(file_get_contents('php://input'), true) ?? [];
+
 // Honeypot: a hidden field real visitors never fill in. If it's set, silently
 // pretend success instead of telling the bot what tripped it.
-if (!empty($_POST['website'])) {
+if (!empty($input['website'])) {
     respond(true, t('Thanks!'));
 }
 
-$name    = trim((string) ($_POST['name'] ?? ''));
-$email   = trim((string) ($_POST['email'] ?? ''));
-$message = trim((string) ($_POST['message'] ?? ''));
+$name    = trim((string) ($input['name'] ?? ''));
+$email   = trim((string) ($input['email'] ?? ''));
+$message = trim((string) ($input['message'] ?? ''));
 
 if ($name === '' || $email === '' || $message === '') {
     respond(false, t('Please fill in all fields.'), 422);
@@ -76,13 +80,13 @@ try {
     $notification->addAddress($config['contact']['to_email'], $config['contact']['to_name']);
     $notification->addReplyTo($email, $name);
     $notification->Subject = "Novo contacto de {$name}";
-    $notification->Body    = getBody($_POST, __DIR__ . '/templates/contact.html');
+    $notification->Body    = getBody($input, __DIR__ . '/templates/contact.html');
     $notification->send();
 
     $reply = newMailer($config);
     $reply->addAddress($email, $name);
     $reply->Subject = 'Recebemos a sua mensagem — Buscardini';
-    $reply->Body    = getBody($_POST, __DIR__ . '/templates/contact-reply.html');
+    $reply->Body    = getBody($input, __DIR__ . '/templates/contact-reply.html');
     $reply->send();
 
     respond(true, t('Your message has been sent successfully.'));
