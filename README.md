@@ -5,9 +5,11 @@ brand for three sub-brands: Comunica (strategic communication), LUMU
 (association for Guinea-Bissau's future), and BMangu (mango export B2B).
 Full-viewport screen with a contact modal and a newsletter signup;
 UI copy is PT-PT throughout. Designed in Claude Design and exported as
-static HTML/CSS/JS. Deploys straight over FTP to `/public_html/` (see
-`.vscode/sftp.json`) — there is no build step or WordPress install here,
-just the tracked files in this repo.
+static HTML/CSS/JS — there is no build step or WordPress install here,
+just the tracked files in this repo. Deploys via cPanel's Git Version
+Control + GitHub Actions (see **Deployment** below), not the SFTP
+extension — `.vscode/sftp.json` still exists and is only used to push
+`process/config.php`, the one file that's deliberately never in git.
 
 ## Structure
 
@@ -78,6 +80,51 @@ silent handoff to the real gettext, unconfigured) on hosts where it's on.
 missing, so an untranslated string never breaks the response. Only `pt`
 is populated for now; add a language by adding a second key under each
 dictionary entry.
+
+## Deployment
+
+The live site is a cPanel-managed git clone, not a manual FTP sync. Push
+and deploy are **deliberately separate** — pushing to `main` never
+touches the live site by itself.
+
+- cPanel (Git™ Version Control) has this repo cloned to
+  `/home/buscardi/repositories/site-buscardini` — outside `public_html`,
+  so `.git/`, this README, `mail-template/`, etc. are never publicly
+  reachable.
+- `.cpanel.yml` at the repo root defines the deploy: an explicit `cp -R`
+  of `index.html`, `assets/`, and `process/` into `public_html`. It's a
+  plain copy, never a delete/mirror sync — that's what lets
+  `process/config.php` survive every deploy untouched, since it isn't
+  tracked in git at all and was never meant to be overwritten.
+- Clone URL is the **public HTTPS** one
+  (`https://github.com/plura/site-buscardini.git`), not SSH — this repo
+  is public, so no credentials are needed for cPanel to pull it. SSH
+  deploy keys were attempted first and abandoned: cPanel's key-gen UI
+  forces a passphrase (blocks unattended use), and even a
+  correctly-generated, correctly-imported, correctly-named
+  passphrase-less key still failed with "invalid format" errors from
+  cPanel's bundled git. Real SSH shell access also isn't available on
+  this hosting account at all (`ssh buscardi@...` times out — firewalled
+  at the network level, confirmed with `ssh -v`), so any future
+  server-side automation needs to go through cPanel's API, not SSH.
+
+**To actually deploy** once something's pushed to `main`:
+
+```
+gh workflow run deploy.yml --repo plura/site-buscardini
+```
+
+— or click "Run workflow" on the repo's GitHub Actions tab. This runs
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+(`workflow_dispatch` trigger only, not `on: push`), which calls cPanel's
+UAPI over HTTPS using a token stored as the `CPANEL_TOKEN` repo secret
+(generated in cPanel under Security → Manage API Tokens) — this works
+even with SSH blocked, since it never touches SSH.
+
+The `workflow_dispatch`-only trigger is intentional, not a placeholder:
+commits to `main` accumulate through normal iteration and aren't always
+meant to go live immediately, so deploy stays an explicit, separate
+decision rather than firing automatically on every push.
 
 ## Setup before going live
 
