@@ -1,0 +1,17 @@
+name: Deploy to cPanel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to cPanel
+        uses: pinkasey/cpanel-deploy-action@v1.0.0
+        with:
+          hostname: 'https://buscardini.net'
+          repository_root: '/home/buscardi/repositories/site-buscardini'
+          branch: main
+          cpanel_username: 'buscardi'
+          cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
