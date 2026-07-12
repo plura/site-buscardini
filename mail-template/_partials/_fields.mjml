@@ -1,6 +1,6 @@
 <mj-section padding="0 24px 24px 24px">
   <mj-column>
-    <mj-text mj-class="kicker" align="left" padding-bottom="4px">Name</mj-text>
+    <mj-text mj-class="kicker" align="left" padding-bottom="4px">Nome</mj-text>
     <mj-text mj-class="field-value" padding-bottom="20px">{{name}}</mj-text>
     <mj-divider border-width="1px" border-color="#C9C2B4" padding-bottom="20px" />
 
@@ -8,7 +8,7 @@
     <mj-text mj-class="field-value" padding-bottom="20px">{{email}}</mj-text>
     <mj-divider border-width="1px" border-color="#C9C2B4" padding-bottom="20px" />
 
-    <mj-text mj-class="kicker" align="left" padding-bottom="4px">Message</mj-text>
+    <mj-text mj-class="kicker" align="left" padding-bottom="4px">Mensagem</mj-text>
     <mj-text mj-class="field-value">{{message}}</mj-text>
   </mj-column>
 </mj-section>

@@ -1,17 +1,17 @@
 <mjml>
   <mj-head>
     <mj-include path="./_partials/_head.mjml" />
-    <mj-title>New contact form submission — Buscardini</mj-title>
-    <mj-preview>New enquiry from {{name}}</mj-preview>
+    <mj-title>Nova submissão do formulário de contacto — Buscardini</mj-title>
+    <mj-preview>Novo contacto de {{name}}</mj-preview>
   </mj-head>
   <mj-body background-color="#F7F4EE" width="600px">
     <mj-include path="./_partials/_header.mjml" />
 
     <mj-section padding="0 24px 24px 24px">
       <mj-column>
-        <mj-text mj-class="kicker" align="left">New Enquiry</mj-text>
+        <mj-text mj-class="kicker" align="left">Novo Contacto</mj-text>
         <mj-text mj-class="body-text" padding-top="8px">
-          Someone submitted the contact form on the website. Details below.
+          Alguém preencheu o formulário de contacto no site. Os detalhes seguem abaixo.
         </mj-text>
       </mj-column>
     </mj-section>

@@ -1,6 +1,6 @@
 <mj-section padding="48px 24px 32px 24px">
   <mj-column>
-    <mj-text mj-class="wordmark" padding-bottom="24px">Buscardini</mj-text>
+    <mj-text mj-class="wordmark" padding-bottom="24px"><a href="https://buscardini.net" target="_blank" style="color:#1C1A17;text-decoration:none;">Buscardini</a></mj-text>
     <mj-divider border-width="1px" border-color="#C9C2B4" />
   </mj-column>
 </mj-section>

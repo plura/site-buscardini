@@ -1,17 +1,17 @@
 <mjml>
   <mj-head>
     <mj-include path="./_partials/_head.mjml" />
-    <mj-title>We received your message — Buscardini</mj-title>
-    <mj-preview>Thanks for reaching out — we'll be in touch soon</mj-preview>
+    <mj-title>Recebemos a sua mensagem — Buscardini</mj-title>
+    <mj-preview>Obrigado pelo contacto — responderemos em breve</mj-preview>
   </mj-head>
   <mj-body background-color="#F7F4EE" width="600px">
     <mj-include path="./_partials/_header.mjml" />
 
     <mj-section padding="0 24px 24px 24px">
       <mj-column>
-        <mj-text mj-class="kicker" align="left">Message Received</mj-text>
+        <mj-text mj-class="kicker" align="left">Mensagem Recebida</mj-text>
         <mj-text mj-class="body-text" padding-top="8px">
-          Thanks for getting in touch, {{name}}. We've received your message and will get back to you as soon as we can. For your records, here's what you sent:
+          Obrigado pela sua mensagem, <strong>{{name}}</strong>. Fica abaixo o resumo do que nos enviou, para sua referência. Prometemos responder o mais breve possível.
         </mj-text>
       </mj-column>
     </mj-section>
