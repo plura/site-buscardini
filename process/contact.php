@@ -79,7 +79,7 @@ try {
     $notification = newMailer($config);
     $notification->addAddress($config['contact']['to_email'], $config['contact']['to_name']);
     $notification->addReplyTo($email, $name);
-    $notification->Subject = "Novo contacto de {$name}";
+    $notification->Subject = "Novo contacto de {$name} — Buscardini";
     $notification->Body    = getBody($input, __DIR__ . '/templates/contact.html');
     $notification->send();
 
