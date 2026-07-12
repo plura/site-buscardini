@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 $config = require __DIR__ . '/config.php';
+require __DIR__ . '/lang.php';
 
 require __DIR__ . '/lib/PHPMailer/Exception.php';
 require __DIR__ . '/lib/PHPMailer/PHPMailer.php';
@@ -49,13 +50,13 @@ function newMailer(array $config): PHPMailer
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    respond(false, 'Método não permitido.', 405);
+    respond(false, t('Method not allowed.'), 405);
 }
 
 // Honeypot: a hidden field real visitors never fill in. If it's set, silently
 // pretend success instead of telling the bot what tripped it.
 if (!empty($_POST['website'])) {
-    respond(true, 'Obrigado!');
+    respond(true, t('Thanks!'));
 }
 
 $name    = trim((string) ($_POST['name'] ?? ''));
@@ -63,11 +64,11 @@ $email   = trim((string) ($_POST['email'] ?? ''));
 $message = trim((string) ($_POST['message'] ?? ''));
 
 if ($name === '' || $email === '' || $message === '') {
-    respond(false, 'Por favor preencha todos os campos.', 422);
+    respond(false, t('Please fill in all fields.'), 422);
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    respond(false, 'Por favor introduza um email válido.', 422);
+    respond(false, t('Please enter a valid email address.'), 422);
 }
 
 try {
@@ -84,8 +85,8 @@ try {
     $reply->Body    = getBody($_POST, __DIR__ . '/templates/contact-reply.html');
     $reply->send();
 
-    respond(true, 'A sua mensagem foi enviada com sucesso.');
+    respond(true, t('Your message has been sent successfully.'));
 } catch (PHPMailerException $e) {
     error_log('Contact form mail error: ' . $e->getMessage());
-    respond(false, 'Ocorreu um erro ao enviar a sua mensagem. Por favor tente novamente mais tarde.', 500);
+    respond(false, t('Something went wrong sending your message. Please try again later.'), 500);
 }

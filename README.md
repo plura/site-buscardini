@@ -17,6 +17,7 @@ process/                   PHP backend for the two dynamic bits of the page
 │   ├── contact.html          notification to the team
 │   └── contact-reply.html    auto-reply to the visitor
 ├── subscribe.php            handles the Mailchimp email signup field
+├── lang.php                 t($text, $lang = 'pt') — dictionary keyed by the English source string
 └── lib/PHPMailer/          vendored PHPMailer source (no Composer)
 
 mail-template/              MJML source for transactional emails tied to the contact form
@@ -42,6 +43,18 @@ mail-template/              MJML source for transactional emails tied to the con
 Both return JSON: `{ "success": bool, "message": string }`. Both also
 accept an optional hidden `website` field as a spam honeypot — leave it
 empty/unrendered in the real form.
+
+Response strings go through `process/lang.php`'s `t($text, $lang = 'pt')` —
+a flat dictionary keyed by the English source string (`t('Thanks!')` →
+`'Obrigado!'`), not PHP's native `gettext()`. Deliberately skipped native
+gettext here: it needs the `gettext` extension enabled server-side plus
+OS-level locales, and PHP defines its own `_()` alias when that extension
+is loaded — declaring a same-named function risks a fatal redeclare (or a
+silent handoff to the real gettext, unconfigured) on hosts where it's on.
+`t()` falls back to the original string when a key or language is
+missing, so an untranslated string never breaks the response. Only `pt`
+is populated for now; add a language by adding a second key under each
+dictionary entry.
 
 ## Setup before going live
 

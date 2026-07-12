@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 $config = require __DIR__ . '/config.php';
+require __DIR__ . '/lang.php';
 
 function respond(bool $success, string $message, int $status = 200): void
 {
@@ -13,25 +14,25 @@ function respond(bool $success, string $message, int $status = 200): void
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    respond(false, 'Method not allowed.', 405);
+    respond(false, t('Method not allowed.'), 405);
 }
 
 // Honeypot: a hidden field real visitors never fill in.
 if (!empty($_POST['website'])) {
-    respond(true, 'Thanks!');
+    respond(true, t('Thanks!'));
 }
 
 $email = trim((string) ($_POST['email'] ?? ''));
 
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    respond(false, 'Please enter a valid email address.', 422);
+    respond(false, t('Please enter a valid email address.'), 422);
 }
 
 $apiKey = $config['mailchimp']['api_key'];
 $listId = $config['mailchimp']['list_id'];
 
 if (strpos($apiKey, '-') === false) {
-    respond(false, 'Mailchimp is not configured correctly.', 500);
+    respond(false, t('Mailchimp is not configured correctly.'), 500);
 }
 
 [, $dataCenter] = explode('-', $apiKey);
@@ -62,19 +63,21 @@ curl_close($ch);
 
 if ($response === false) {
     error_log('Mailchimp subscribe cURL error: ' . $curlError);
-    respond(false, 'Sorry, something went wrong. Please try again later.', 500);
+    respond(false, t('Sorry, something went wrong. Please try again later.'), 500);
 }
 
 $data = json_decode($response, true);
 
 if ($statusCode >= 200 && $statusCode < 300) {
-    respond(true, 'Thanks for subscribing! Check your inbox to confirm.');
+    respond(true, t('Thanks for subscribing! Check your inbox to confirm.'));
 }
 
 // Mailchimp returns 400 with this title if the address is already on the list.
 if (($data['title'] ?? '') === 'Member Exists') {
-    respond(true, "You're already subscribed!");
+    respond(true, t("You're already subscribed!"));
 }
 
+// $data['detail'] is Mailchimp's own API error text (English, dynamic) — not
+// something we can translate, so it only shows up if our own fallback misses.
 error_log('Mailchimp subscribe error: ' . $response);
-respond(false, $data['detail'] ?? 'Sorry, something went wrong. Please try again later.', 500);
+respond(false, $data['detail'] ?? t('Sorry, something went wrong. Please try again later.'), 500);
