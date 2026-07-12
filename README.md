@@ -12,7 +12,10 @@ process/                   PHP backend for the two dynamic bits of the page
 ├── .htaccess               rewrites /process/contact and /process/subscribe to their .php handlers
 ├── config.example.php      committed template — copy to config.php and fill in
 ├── config.php               real credentials — gitignored, never committed
-├── contact.php              handles the CTA contact form
+├── contact.php              handles the CTA contact form, sends both emails below
+├── contact/                 compiled email HTML consumed by contact.php — committed (no build step on the live server)
+│   ├── contact.html          notification to the team
+│   └── contact-reply.html    auto-reply to the visitor
 ├── subscribe.php            handles the Mailchimp email signup field
 └── lib/PHPMailer/          vendored PHPMailer source (no Composer)
 
@@ -59,10 +62,9 @@ on cPanel-style shared hosting).
 
 MJML source for the two emails the contact form triggers, following the
 Buscardini email design spec (Cormorant Garamond + IBM Plex Mono, warm
-off-white palette, square corners, no shadows). Not yet wired into
-`process/contact.php` — that PHP handler currently sends a plain-text
-email and needs to be updated to load the compiled HTML and substitute
-`{{name}}` / `{{email}}` / `{{message}}` once these templates are approved.
+off-white palette, square corners, no shadows), copy in European
+Portuguese. Wired into `process/contact.php`, which sends the
+notification (to the team) and the reply (to the visitor) via PHPMailer.
 
 Run from inside `mail-template/`, no local install — `npx` fetches the
 compiler on demand rather than adding a `node_modules/` to the project:
@@ -80,7 +82,18 @@ root) to resolve `mj-include` for live preview — that's a separate
 mechanism from the `npx` build above, and is where `mjml.allowIncludes`/
 `mjml.includePath` actually need to live for the extension to find them.
 
+**After any content/design change to either template**, rebuild both and
+copy the output into `process/contact/` — that's what `contact.php`
+actually reads at runtime (the live server has no build step, so this
+copy has to be committed, unlike `mail-template/dist/`):
+
+```
+cp dist/contact.html dist/contact-reply.html ../process/contact/
+```
+
 `{{name}}`, `{{email}}`, `{{message}}` are raw placeholder tokens left in
-the compiled HTML for the PHP backend to substitute after build — they sit
-inside already-styled elements, so a plain string replace inherits the
-correct inline styles.
+the compiled HTML; `contact.php`'s `getBody()` substitutes them with
+`htmlspecialchars()`-escaped submission data (and `nl2br()` for the
+message) after loading the file — they sit inside already-styled
+elements, so the substitution inherits the correct inline styles without
+needing to rebuild the HTML structure.

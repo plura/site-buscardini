@@ -19,31 +19,20 @@ function respond(bool $success, string $message, int $status = 200): void
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    respond(false, 'Method not allowed.', 405);
+function getBody(array $data, string $template = __DIR__ . '/contact/contact.html'): string
+{
+    $html = file_get_contents($template);
+
+    return strtr($html, [
+        '{{name}}'    => htmlspecialchars((string) ($data['name'] ?? ''), ENT_QUOTES, 'UTF-8'),
+        '{{email}}'   => htmlspecialchars((string) ($data['email'] ?? ''), ENT_QUOTES, 'UTF-8'),
+        '{{message}}' => nl2br(htmlspecialchars((string) ($data['message'] ?? ''), ENT_QUOTES, 'UTF-8')),
+    ]);
 }
 
-// Honeypot: a hidden field real visitors never fill in. If it's set, silently
-// pretend success instead of telling the bot what tripped it.
-if (!empty($_POST['website'])) {
-    respond(true, 'Thanks!');
-}
-
-$name    = trim((string) ($_POST['name'] ?? ''));
-$email   = trim((string) ($_POST['email'] ?? ''));
-$message = trim((string) ($_POST['message'] ?? ''));
-
-if ($name === '' || $email === '' || $message === '') {
-    respond(false, 'Please fill in all fields.', 422);
-}
-
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    respond(false, 'Please enter a valid email address.', 422);
-}
-
-$mail = new PHPMailer(true);
-
-try {
+function newMailer(array $config): PHPMailer
+{
+    $mail = new PHPMailer(true);
     $mail->isSMTP();
     $mail->Host       = $config['smtp']['host'];
     $mail->SMTPAuth   = true;
@@ -52,18 +41,50 @@ try {
     $mail->SMTPSecure = $config['smtp']['encryption'];
     $mail->Port       = $config['smtp']['port'];
     $mail->CharSet    = 'UTF-8';
-
+    $mail->isHTML(true);
     $mail->setFrom($config['contact']['from_email'], $config['contact']['from_name']);
-    $mail->addAddress($config['contact']['to_email'], $config['contact']['to_name']);
-    $mail->addReplyTo($email, $name);
 
-    $mail->Subject = 'New contact form message from ' . $name;
-    $mail->Body    = "Name: {$name}\nEmail: {$email}\n\nMessage:\n{$message}";
+    return $mail;
+}
 
-    $mail->send();
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    respond(false, 'Método não permitido.', 405);
+}
 
-    respond(true, 'Thanks — your message has been sent.');
+// Honeypot: a hidden field real visitors never fill in. If it's set, silently
+// pretend success instead of telling the bot what tripped it.
+if (!empty($_POST['website'])) {
+    respond(true, 'Obrigado!');
+}
+
+$name    = trim((string) ($_POST['name'] ?? ''));
+$email   = trim((string) ($_POST['email'] ?? ''));
+$message = trim((string) ($_POST['message'] ?? ''));
+
+if ($name === '' || $email === '' || $message === '') {
+    respond(false, 'Por favor preencha todos os campos.', 422);
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    respond(false, 'Por favor introduza um email válido.', 422);
+}
+
+try {
+    $notification = newMailer($config);
+    $notification->addAddress($config['contact']['to_email'], $config['contact']['to_name']);
+    $notification->addReplyTo($email, $name);
+    $notification->Subject = "Novo contacto de {$name}";
+    $notification->Body    = getBody($_POST, __DIR__ . '/contact/contact.html');
+    $notification->send();
+
+    $reply = newMailer($config);
+    $reply->addAddress($email, $name);
+    $reply->Subject = 'Recebemos a sua mensagem — Buscardini';
+    $reply->Body    = getBody($_POST, __DIR__ . '/contact/contact-reply.html');
+    $reply->send();
+
+    respond(true, 'A sua mensagem foi enviada com sucesso.');
 } catch (PHPMailerException $e) {
-    error_log('Contact form mail error: ' . $mail->ErrorInfo);
-    respond(false, 'Sorry, something went wrong sending your message. Please try again later.', 500);
+    error_log('Contact form mail error: ' . $e->getMessage());
+    respond(false, 'Ocorreu um erro ao enviar a sua mensagem. Por favor tente novamente mais tarde.', 500);
 }
