@@ -17,5 +17,5 @@
     "syncOption": {
         "delete": false
     },
-    "ignore": [".vscode", ".git", ".DS_Store", "Thumbs.db", ".gitignore", ".claude"]
+    "ignore": [".vscode", ".git", ".DS_Store", "Thumbs.db", ".gitignore", ".claude", "mail-template", "README.md", "process/config.example.php"]
 }
