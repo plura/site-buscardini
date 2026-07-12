@@ -1,0 +1,6 @@
+<mj-section padding="32px 24px 40px 24px">
+  <mj-column>
+    <mj-divider border-width="1px" border-color="#C9C2B4" padding-bottom="24px" />
+    <mj-include path="./_credits.mjml" />
+  </mj-column>
+</mj-section>

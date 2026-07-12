@@ -1,0 +1,6 @@
+<mj-section padding="48px 24px 32px 24px">
+  <mj-column>
+    <mj-text mj-class="wordmark" padding-bottom="24px">Buscardini</mj-text>
+    <mj-divider border-width="1px" border-color="#C9C2B4" />
+  </mj-column>
+</mj-section>

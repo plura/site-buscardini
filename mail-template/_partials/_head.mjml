@@ -1,0 +1,77 @@
+<mj-raw>
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+</mj-raw>
+
+<mj-font name="Cormorant Garamond" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" />
+<mj-font name="IBM Plex Mono" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" />
+
+<mj-attributes>
+  <mj-all font-family="'IBM Plex Mono', 'Courier New', monospace" />
+  <mj-text font-size="14px" line-height="1.7" color="#1C1A17" />
+  <mj-section padding="0" />
+  <mj-column padding="0" />
+  <mj-divider border-width="1px" border-color="#C9C2B4" padding="0" />
+  <mj-button
+    background-color="#1C1A17"
+    color="#F7F4EE"
+    font-family="'IBM Plex Mono', 'Courier New', monospace"
+    font-size="13px"
+    font-weight="500"
+    text-transform="uppercase"
+    letter-spacing="0.14em"
+    border-radius="0"
+    inner-padding="16px 36px"
+  />
+
+  <!-- Buscardini design system — reuse these mj-class tokens in every mail-template, don't redeclare styles inline -->
+  <mj-class
+    name="wordmark"
+    font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif"
+    font-weight="500"
+    font-size="48px"
+    line-height="1"
+    color="#1C1A17"
+    align="center"
+  />
+  <mj-class
+    name="tagline"
+    font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif"
+    font-style="italic"
+    font-size="20px"
+    line-height="1.4"
+    color="#5C574E"
+    align="center"
+  />
+  <mj-class
+    name="kicker"
+    font-size="11px"
+    text-transform="uppercase"
+    letter-spacing="0.3em"
+    color="#8A6D3B"
+    font-weight="500"
+    align="center"
+  />
+  <mj-class
+    name="body-text"
+    font-size="14px"
+    line-height="1.7"
+    color="#1C1A17"
+    align="left"
+  />
+  <mj-class
+    name="field-value"
+    font-size="14px"
+    line-height="1.6"
+    color="#1C1A17"
+    align="left"
+  />
+  <mj-class
+    name="footer-text"
+    font-size="11px"
+    letter-spacing="0.1em"
+    color="#8B857A"
+    align="center"
+    line-height="1.6"
+  />
+</mj-attributes>
