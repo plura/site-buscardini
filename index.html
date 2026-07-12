@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscardini — Comunicação. Cultura. Impacto.</title>
+  <meta name="description" content="Buscardini — Comunicação. Cultura. Impacto. Em breve. Comunica · LUMU · BMangu.">
+  <meta property="og:title" content="Buscardini">
+  <meta property="og:description" content="Comunicação. Cultura. Impacto.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buscardini.net">
+  <link rel="icon" type="image/svg+xml" href="assets/media/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- Ambient background -->
+    <div class="ambient" aria-hidden="true">
+      <div class="ambient__glow"></div>
+    </div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <div class="intro fade-up">
+        <h1 class="wordmark">Buscardini</h1>
+        <p class="tagline">Comunicação. Cultura. Impacto.</p>
+      </div>
+
+      <div class="cta-row fade-up fade-up--d1">
+        <button class="btn btn--solid" type="button" data-open-modal>Entre em contacto</button>
+      </div>
+
+      <div class="kicker fade-up fade-up--d2">As nossas marcas</div>
+
+      <nav class="brands fade-up fade-up--d3" aria-label="As nossas marcas">
+        <a class="brand" href="https://comunica.buscardini.net" target="_blank" rel="noopener" aria-label="Comunica">
+          <span class="brand__logo brand__logo--comunica"></span>
+          <span class="brand__caption">Comunicação estratégica</span>
+        </a>
+        <a class="brand" href="https://lumu.pt" target="_blank" rel="noopener" aria-label="LUMU">
+          <span class="brand__logo brand__logo--lumu"></span>
+          <span class="brand__caption">Pelo futuro da Guiné-Bissau</span>
+        </a>
+        <a class="brand" href="https://mangu.buscardini.net" target="_blank" rel="noopener" aria-label="BMangu">
+          <span class="brand__logo brand__logo--bmangu"></span>
+          <span class="brand__caption">Exportação de manga</span>
+        </a>
+      </nav>
+
+      <!-- Newsletter -->
+      <div class="newsletter fade-up fade-up--d4">
+        <div class="kicker">Deixe o seu email para saber mais</div>
+        <form class="newsletter__form" id="newsletter-form" novalidate>
+          <div class="newsletter__row">
+            <input class="newsletter__input" type="email" name="email" placeholder="nome@email.com" aria-label="Email" autocomplete="email">
+            <button class="newsletter__submit" type="submit" aria-label="Subscrever">→</button>
+          </div>
+          <p class="form-error" id="newsletter-error" hidden></p>
+        </form>
+        <p class="newsletter__done" id="newsletter-done" hidden>Obrigado — entraremos em contacto.</p>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>© 2026 Buscardini</span>
+      <span class="footer__sep">—</span>
+      <a href="https://plura.pt" target="_blank" rel="noopener">powered by Plura™</a>
+    </footer>
+
+  </div>
+
+  <!-- Contact modal -->
+  <div class="modal" id="contact-modal" hidden>
+    <div class="modal__overlay" data-close-modal></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal__close" type="button" data-close-modal aria-label="Fechar">×</button>
+
+      <form class="modal__form" id="contact-form" novalidate>
+        <h2 class="modal__title" id="modal-title">Entre em contacto</h2>
+        <p class="modal__subtitle">Respondemos com brevidade.</p>
+
+        <div class="fields">
+          <label class="field">
+            <span class="field__label">Nome</span>
+            <input class="field__input" type="text" name="name" placeholder="O seu nome" autocomplete="name">
+          </label>
+          <label class="field">
+            <span class="field__label">Email</span>
+            <input class="field__input" type="email" name="email" placeholder="nome@email.com" autocomplete="email">
+          </label>
+          <label class="field">
+            <span class="field__label">Mensagem</span>
+            <textarea class="field__input field__input--area" name="message" rows="4" placeholder="Escreva a sua mensagem…"></textarea>
+          </label>
+        </div>
+
+        <p class="form-error" id="contact-error" hidden></p>
+
+        <button class="btn btn--solid btn--block" type="submit" id="contact-submit">Enviar mensagem</button>
+      </form>
+
+      <div class="modal__success" id="contact-success" hidden>
+        <h2 class="modal__title">Obrigado.</h2>
+        <p class="modal__success-text">A sua mensagem foi enviada.<br>Entraremos em contacto em breve.</p>
+        <button class="btn btn--outline" type="button" data-close-modal>Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
