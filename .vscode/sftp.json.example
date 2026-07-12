@@ -1,6 +1,5 @@
 {
     "name": "Buscardini",
-    "context": "site",
     "protocol": "ftp",
     "host": "",
     "port": 21,
