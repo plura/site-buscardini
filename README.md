@@ -13,7 +13,7 @@ process/                   PHP backend for the two dynamic bits of the page
 ├── config.example.php      committed template — copy to config.php and fill in
 ├── config.php               real credentials — gitignored, never committed
 ├── contact.php              handles the CTA contact form, sends both emails below
-├── contact/                 compiled email HTML consumed by contact.php — committed (no build step on the live server)
+├── templates/                compiled email HTML consumed by contact.php — committed (no build step on the live server)
 │   ├── contact.html          notification to the team
 │   └── contact-reply.html    auto-reply to the visitor
 ├── subscribe.php            handles the Mailchimp email signup field
@@ -83,12 +83,12 @@ mechanism from the `npx` build above, and is where `mjml.allowIncludes`/
 `mjml.includePath` actually need to live for the extension to find them.
 
 **After any content/design change to either template**, rebuild both and
-copy the output into `process/contact/` — that's what `contact.php`
+copy the output into `process/templates/` — that's what `contact.php`
 actually reads at runtime (the live server has no build step, so this
 copy has to be committed, unlike `mail-template/dist/`):
 
 ```
-cp dist/contact.html dist/contact-reply.html ../process/contact/
+cp dist/contact.html dist/contact-reply.html ../process/templates/
 ```
 
 `{{name}}`, `{{email}}`, `{{message}}` are raw placeholder tokens left in

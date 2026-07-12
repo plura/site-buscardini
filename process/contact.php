@@ -19,14 +19,15 @@ function respond(bool $success, string $message, int $status = 200): void
     exit;
 }
 
-function getBody(array $data, string $template = __DIR__ . '/contact/contact.html'): string
+function getBody(array $data, string $template = __DIR__ . '/templates/contact.html'): string
 {
     $html = file_get_contents($template);
+    $clean = fn ($value) => htmlspecialchars((string) ($value ?? ''), ENT_QUOTES, 'UTF-8');
 
     return strtr($html, [
-        '{{name}}'    => htmlspecialchars((string) ($data['name'] ?? ''), ENT_QUOTES, 'UTF-8'),
-        '{{email}}'   => htmlspecialchars((string) ($data['email'] ?? ''), ENT_QUOTES, 'UTF-8'),
-        '{{message}}' => nl2br(htmlspecialchars((string) ($data['message'] ?? ''), ENT_QUOTES, 'UTF-8')),
+        '{{name}}'    => $clean($data['name'] ?? ''),
+        '{{email}}'   => $clean($data['email'] ?? ''),
+        '{{message}}' => nl2br($clean($data['message'] ?? '')),
     ]);
 }
 
@@ -74,13 +75,13 @@ try {
     $notification->addAddress($config['contact']['to_email'], $config['contact']['to_name']);
     $notification->addReplyTo($email, $name);
     $notification->Subject = "Novo contacto de {$name}";
-    $notification->Body    = getBody($_POST, __DIR__ . '/contact/contact.html');
+    $notification->Body    = getBody($_POST, __DIR__ . '/templates/contact.html');
     $notification->send();
 
     $reply = newMailer($config);
     $reply->addAddress($email, $name);
     $reply->Subject = 'Recebemos a sua mensagem — Buscardini';
-    $reply->Body    = getBody($_POST, __DIR__ . '/contact/contact-reply.html');
+    $reply->Body    = getBody($_POST, __DIR__ . '/templates/contact-reply.html');
     $reply->send();
 
     respond(true, 'A sua mensagem foi enviada com sucesso.');
