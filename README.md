@@ -90,9 +90,15 @@ dictionary entry.
    will still need to be uploaded manually (or the extension configured to
    include it) since it isn't in git.
 
-Requires Apache with `mod_rewrite` and `AllowOverride` enabled for the
-clean `/process/contact` and `/process/subscribe` URLs to work (standard
-on cPanel-style shared hosting).
+Requires `.htaccess`-driven URL rewriting (`RewriteRule`/`AllowOverride`)
+for the clean `/process/contact` and `/process/subscribe` URLs to work.
+buscardini.net's actual host runs **LiteSpeed (LSAPI)**, not stock
+Apache — LiteSpeed honors `.htaccess` in the same syntax and should work
+unchanged, but it's not literally Apache, so worth hitting both URLs
+directly once deployed to confirm the rewrite resolves rather than
+assuming. Confirmed via `phpinfo()` on the live host: PHP 8.5.6,
+`openssl` and `curl` both enabled (needed for PHPMailer/SMTP and the
+Mailchimp API respectively) — no extension gaps expected there.
 
 ## Email templates (mail-template/)
 
