@@ -1,4 +1,4 @@
 {
     "mjml.allowIncludes": true,
-    "mjml.includePath": "./mail-template"
+    "mjml.includePath": ["./mail-template"]
 }

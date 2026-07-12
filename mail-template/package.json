@@ -1,0 +1,11 @@
+{
+  "name": "buscardini-mail-templates",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:contact && npm run build:contact-reply",
+    "build:contact": "npx --yes mjml@^4 contact.mjml -o dist/contact.html --config.allowIncludes true --config.includePath .",
+    "build:contact-reply": "npx --yes mjml@^4 contact-reply.mjml -o dist/contact-reply.html --config.allowIncludes true --config.includePath .",
+    "watch:contact": "npx --yes mjml@^4 -w contact.mjml -o dist/contact.html --config.allowIncludes true --config.includePath .",
+    "watch:contact-reply": "npx --yes mjml@^4 -w contact-reply.mjml -o dist/contact-reply.html --config.allowIncludes true --config.includePath ."
+  }
+}
